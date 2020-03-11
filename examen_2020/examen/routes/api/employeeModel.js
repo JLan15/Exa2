@@ -3,26 +3,69 @@ var ObjectID = require('mongodb').ObjectID;
 function employeeModel(db){
   var lib = {};
   var empColl = db.collection('employees');
-  lib.getEmployees = (handler)=>{
+  lib.getEmployees = (handler)=>
+  {
+
+    empColl.find({}).toArray(
+      (err, employee)=>
+      {
+          if(err)
+          {
+              console.log(err);
+              return handler(err, null);
+          }
+          return handler(null, employee)
+      }
+  );
     // implementar
     // obtener todos los documentos
-    return handler(new Error("No Implementado"), null);
+    //return handler(new Error("No Implementado"), null);
   }
 
-  lib.getEmployeesById = (id, handler) => {
+  lib.getEmployeesById = (id, handler) => 
+  {
+    var query = { "_id": new ObjectID(id) };
+    empColl.findOne(
+      query,
+      (err, employee) => {
+        if (err) {
+          return handler(err, null);
+        }
+        return handler(null, employee);
+      }
+    ); //findOne
+
     // implementar
     // Obtener un Documento solo mostrar
     // email, phone, name y age
-    return handler(new Error("No Implementado"), null);
+    //return handler(new Error("No Implementado"), null);
   }
 
   lib.getEmployeesByCompany = (company, handler) => {
-    // implementar
-    // solo mostrar name, email, company
-    return handler(new Error("No Implementado"), null);
+    var query = { "_company": new ObjectID(company) };
+    empColl.findOne(
+      query,
+      (err, demployee) => {
+        if (err) {
+          return handler(err, null);
+        }
+        return handler(null, employee);
+      }
+    ); //findOne
+    //return handler(new Error("No Implementado"), null);
   }
 
   lib.getEmployeesByTag = (tag, handler) => {
+    var query = { "_tag": new ObjectID(tag) };
+    empColl.findOne(
+      query,
+      (err, employee) => {
+        if (err) {
+          return handler(err, null);
+        }
+        return handler(null, employee);
+      }
+    ); //findOne
     //implementar
     // obtener todos los documentos que contenga 
     // al menos una vez el tag dentro del arreglo
@@ -39,6 +82,16 @@ function employeeModel(db){
   }
 
   lib.removeEmployee = (id, handler) => {
+    var query = {"_id": new ObjectID(id)};
+    empColl.deleteOne(
+      query,
+      (err, rslt)=>{
+        if(err){
+          return handler(err, null);
+        }
+        return handler(null, rslt.result);
+      }
+    ); //deleteOne
     //Implementar
     //Se requiere eliminar un documento de la colección
     return handler(new Error("No Implementado"), null);
